@@ -3,205 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McTopTier | Leaderboard</title>
+    <title>McTopTier | Minecraft Edition</title>
     <style>
+        /* Minecraft Font Style */
+        @import url('https://fonts.cdnfonts.com/css/minecraftia');
+
         :root {
-            --bg: #080808;
-            --card: #121212;
-            --nav: #1a1a1a;
-            --green: #00ff88;
-            --red: #ff4444;
-            --text: #ffffff;
-            --dim: #888;
+            --mc-green: #55FF55;
+            --mc-dark-green: #00AA00;
+            --mc-bg: #1e1e1e;
+            --mc-panel: #313131;
+            --mc-border: #000000;
+            --mc-shadow: #555555;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--mc-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Subtle texture */
+            color: white;
+            font-family: 'Minecraftia', sans-serif;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            image-rendering: pixelated;
         }
 
-        /* Top Section Navigation */
-        .header-nav {
-            background: var(--nav);
+        /* Minecraft Style Navbar */
+        .mc-nav {
+            background: #484848;
+            border-bottom: 4px solid var(--mc-border);
             display: flex;
             overflow-x: auto;
-            border-bottom: 1px solid #222;
+            padding: 5px;
+            gap: 5px;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
         }
 
-        .nav-item {
-            padding: 15px 20px;
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: bold;
-            color: var(--dim);
+        .nav-btn {
+            background: #7e7e7e;
+            border: 3px solid var(--mc-border);
+            box-shadow: inset -3px -3px var(--mc-shadow), inset 3px 3px #ffffff33;
+            padding: 10px 15px;
+            color: #DDD;
+            text-shadow: 2px 2px var(--mc-border);
+            font-size: 10px;
             cursor: pointer;
             white-space: nowrap;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
         }
 
-        .nav-item.active {
-            color: var(--green);
-            border-bottom: 2px solid var(--green);
+        .nav-btn.active {
+            background: var(--mc-dark-green);
+            color: var(--mc-green);
+            box-shadow: inset -3px -3px #006400, inset 3px 3px #ffffff33;
         }
 
-        /* Search Area */
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        
-        .page-title {
+        .nav-btn:active {
+            transform: translateY(2px);
+            box-shadow: inset 3px 3px var(--mc-border);
+        }
+
+        /* Container */
+        .container { padding: 20px; max-width: 900px; margin: auto; }
+
+        .title-box {
             text-align: center;
-            font-size: 22px;
+            text-shadow: 3px 3px var(--mc-border);
+            color: var(--mc-green);
+            font-size: 20px;
             margin-bottom: 20px;
-            letter-spacing: 1px;
         }
 
-        .search-box {
+        /* Search Input */
+        .mc-input {
             width: 100%;
-            background: #151515;
-            border: 1px solid #333;
+            background: #000;
+            border: 3px solid #555;
             padding: 12px;
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 25px;
+            color: var(--mc-green);
+            font-family: 'Minecraftia', sans-serif;
+            margin-bottom: 20px;
             box-sizing: border-box;
-            outline: none;
         }
 
-        /* Table Style */
-        .rank-table {
+        /* Minecraft Table */
+        .mc-table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid var(--mc-border);
+            background: var(--mc-panel);
         }
 
-        .rank-table th {
-            background: #181818;
-            padding: 15px 10px;
+        .mc-table th {
+            background: #252525;
+            border: 2px solid var(--mc-border);
+            padding: 12px;
             text-align: left;
             font-size: 11px;
-            color: var(--dim);
-            text-transform: uppercase;
+            color: #AAA;
         }
 
-        .rank-table td {
+        .mc-table tr:nth-child(even) { background: #3a3a3a; }
+
+        .mc-table td {
             padding: 15px 10px;
-            border-bottom: 1px solid #1c1c1c;
-            font-size: 14px;
+            border: 2px solid #222;
         }
 
-        /* Player Styling */
-        .player-flex { display: flex; align-items: center; gap: 10px; }
-        .skin-icon { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #333; }
-        
-        /* Tier/Emoji Styling */
-        .modes-list { display: flex; gap: 12px; flex-wrap: wrap; }
-        .mode-unit { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 2px;
-        }
-        .emoji-icon { font-size: 18px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        .tier-label { 
-            font-size: 9px; 
-            font-weight: bold; 
-            color: #aaa; 
-            background: #252525;
-            padding: 1px 4px;
-            border-radius: 3px;
+        /* Player Graphics */
+        .player-row { display: flex; align-items: center; gap: 12px; }
+        .head-img { 
+            width: 32px; height: 32px; 
+            border: 2px solid var(--mc-border);
+            image-rendering: pixelated;
         }
 
-        /* Points Popup */
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
+        /* Mode & Tiers */
+        .tier-wrap { display: flex; gap: 15px; }
+        .mode-box { display: flex; flex-direction: column; align-items: center; }
+        .emoji { font-size: 20px; margin-bottom: 2px; }
+        .label { 
+            font-size: 8px; 
+            background: #000; 
+            color: #FFF; 
+            padding: 2px 5px; 
+            border: 1px solid #555;
+        }
+
+        /* Modal / GUI */
+        #gui-blur {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000;
+        }
+
+        #mc-modal {
+            display: none; position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: #151515;
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid var(--green);
-            text-align: center;
-            z-index: 100;
-            width: 280px;
+            background: #C6C6C6; /* Classic Inventory Color */
+            border: 4px solid var(--mc-border);
+            box-shadow: inset -4px -4px #555, inset 4px 4px #FFF;
+            padding: 30px; width: 300px; z-index: 1001; text-align: center;
         }
-        #blur {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 90;
+
+        .mc-button {
+            background: #7e7e7e;
+            border: 3px solid var(--mc-border);
+            padding: 10px;
+            width: 100%;
+            color: white;
+            font-family: 'Minecraftia', sans-serif;
+            margin-top: 20px;
+            text-shadow: 2px 2px #000;
+            cursor: pointer;
         }
+
+        .mc-button:hover { background: #8e8e8e; }
     </style>
 </head>
 <body>
 
-    <div class="header-nav">
-        <div class="nav-item"><span>🔨</span>CORE</div>
-        <div class="nav-item active"><span>🏆</span>OVERALL</div>
-        <div class="nav-item"><span>❤️</span>UHC</div>
-        <div class="nav-item"><span>🧪</span>POT</div>
-        <div class="nav-item"><span>⚔️</span>VANILLA</div>
-        <div class="nav-item"><span>🪖</span>NETHPOT</div>
-        <div class="nav-item"><span>🔮</span>SMP</div>
+    <div class="mc-nav">
+        <div class="nav-btn"><span>🏆</span>Overall</div>
+        <div class="nav-btn active"><span>🧪</span>Pot</div>
+        <div class="nav-btn"><span>⚔️</span>Sword</div>
+        <div class="nav-btn"><span>❤️</span>UHC</div>
+        <div class="nav-btn"><span>🪖</span>Nether</div>
+        <div class="nav-btn"><span>🔮</span>SMP</div>
     </div>
 
     <div class="container">
-        <h1 class="page-title">OVERALL RANKINGS</h1>
-        <input type="text" class="search-box" placeholder="Search for a player...">
+        <h1 class="title-box">OVERALL RANKINGS</h1>
+        <input type="text" class="mc-input" placeholder="Search Player...">
 
-        <table class="rank-table">
+        <table class="mc-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>PLAYER</th>
-                    <th>REGION</th>
-                    <th>MODES</th>
+                    <th width="40">#</th>
+                    <th>Player</th>
+                    <th>Region</th>
+                    <th>Tiers</th>
                 </tr>
             </thead>
-            <tbody id="playerList">
-                <tr onclick="openStats('Smitenesss', 'EU', ['HT1', 'LT1'])">
-                    <td style="color:#555">1</td>
+            <tbody>
+                <tr onclick="showStats('Smitenesss', 'EU', 380)">
+                    <td style="color:#AAA">1</td>
                     <td>
-                        <div class="player-flex">
-                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="skin-icon">
-                            <span style="color:var(--green); font-weight:bold;">Smitenesss</span>
+                        <div class="player-row">
+                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="head-img">
+                            <span style="color:var(--mc-green)">Smitenesss</span>
                         </div>
                     </td>
-                    <td style="color:var(--dim)">EU</td>
+                    <td style="color:#AAA">EU</td>
                     <td>
-                        <div class="modes-list">
-                            <div class="mode-unit"><span class="emoji-icon">🪖</span><span class="tier-label">HT1</span></div>
-                            <div class="mode-unit"><span class="emoji-icon">🔨</span><span class="tier-label">LT1</span></div>
+                        <div class="tier-wrap">
+                            <div class="mode-box"><span class="emoji">🪖</span><span class="label">HT1</span></div>
+                            <div class="mode-box"><span class="emoji">🧪</span><span class="label">LT1</span></div>
                         </div>
                     </td>
                 </tr>
 
-                <tr onclick="openStats('SaumyaXtreme', 'AS', ['HT2', 'LT3'])">
-                    <td style="color:#555">2</td>
+                <tr onclick="showStats('SaumyaXtreme', 'AS', 260)">
+                    <td style="color:#AAA">2</td>
                     <td>
-                        <div class="player-flex">
-                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="skin-icon">
-                            <span style="color:var(--red); font-weight:bold;">SaumyaXtreme</span>
+                        <div class="player-row">
+                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="head-img">
+                            <span style="color:#FF5555">SaumyaXtreme</span>
                         </div>
                     </td>
-                    <td style="color:var(--dim)">AS</td>
+                    <td style="color:#AAA">AS</td>
                     <td>
-                        <div class="modes-list">
-                            <div class="mode-unit"><span class="emoji-icon">🔮</span><span class="tier-label">LT3</span></div>
-                            <div class="mode-unit"><span class="emoji-icon">⚔️</span><span class="tier-label">HT2</span></div>
+                        <div class="tier-wrap">
+                            <div class="mode-box"><span class="emoji">🔮</span><span class="label">LT3</span></div>
+                            <div class="mode-box"><span class="emoji">⚔️</span><span class="label">HT2</span></div>
                         </div>
                     </td>
                 </tr>
@@ -209,39 +225,29 @@
         </table>
     </div>
 
-    <div id="blur" onclick="closeStats()"></div>
-    <div id="popup">
-        <h2 id="pop-name" style="margin-bottom:5px;"></h2>
-        <p id="pop-reg" style="color:#666; font-size:12px; margin-top:0;"></p>
-        <div style="font-size:45px; color:var(--green); font-weight:bold; margin:15px 0;" id="pop-points">0</div>
-        <p style="color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:1px;">Total Tier Points</p>
-        <button onclick="closeStats()" style="background:var(--nav); color:white; border:none; padding:10px 25px; border-radius:8px; cursor:pointer; margin-top:15px;">Close</button>
+    <div id="gui-blur" onclick="hideStats()"></div>
+    <div id="mc-modal">
+        <h2 id="p-name" style="color:#373737; text-shadow:none; margin:0;">Player</h2>
+        <p id="p-reg" style="color:#555; font-size:10px; margin-bottom:15px;">REGION</p>
+        <div style="background:#000; border:2px solid #555; padding:15px;">
+            <span style="color:#AAA; font-size:10px;">TOTAL POINTS</span><br>
+            <span id="p-points" style="color:var(--mc-green); font-size:32px;">0</span>
+        </div>
+        <button class="mc-button" onclick="hideStats()">DONE</button>
     </div>
 
     <script>
-        const pointsMapping = {
-            'HT1': 200, 'LT1': 180,
-            'HT2': 160, 'LT2': 140,
-            'HT3': 120, 'LT3': 100,
-            'HT4': 80,  'LT4': 60,
-            'HT5': 40,  'LT5': 20
-        };
-
-        function openStats(name, reg, tiers) {
-            let total = 0;
-            tiers.forEach(t => { total += pointsMapping[t] || 0; });
-            
-            document.getElementById('pop-name').innerText = name;
-            document.getElementById('pop-reg').innerText = "REGION: " + reg;
-            document.getElementById('pop-points').innerText = total;
-            
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('blur').style.display = 'block';
+        function showStats(name, reg, points) {
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-reg').innerText = "REGION: " + reg;
+            document.getElementById('p-points').innerText = points;
+            document.getElementById('mc-modal').style.display = 'block';
+            document.getElementById('gui-blur').style.display = 'block';
         }
 
-        function closeStats() {
-            document.getElementById('popup').style.display = 'none';
-            document.getElementById('blur').style.display = 'none';
+        function hideStats() {
+            document.getElementById('mc-modal').style.display = 'none';
+            document.getElementById('gui-blur').style.display = 'none';
         }
     </script>
 </body>
