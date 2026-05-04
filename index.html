@@ -3,78 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McTopTier Leaderboard</title>
+    <title>McTopTier | Leaderboard</title>
     <style>
-        :root { --bg: #0a0a0a; --card: #111; --accent: #00ff88; --text: #eee; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; }
+        :root {
+            --bg: #080808;
+            --card: #121212;
+            --nav: #1a1a1a;
+            --green: #00ff88;
+            --red: #ff4444;
+            --text: #ffffff;
+            --dim: #888;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Top Section Navigation */
+        .header-nav {
+            background: var(--nav);
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--dim);
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--green);
+            border-bottom: 2px solid var(--green);
+        }
+
+        /* Search Area */
+        .container { padding: 20px; max-width: 800px; margin: auto; }
         
-        /* Navigation Bar */
-        .nav-container { display: flex; background: #151515; padding: 10px; gap: 10px; overflow-x: auto; border-bottom: 1px solid #222; }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; min-width: 60px; opacity: 0.7; cursor: pointer; }
-        .nav-btn.active { opacity: 1; border-bottom: 2px solid var(--accent); }
-        .nav-icon { width: 22px; height: 22px; object-fit: contain; margin-bottom: 4px; }
-        .nav-text { font-size: 9px; text-transform: uppercase; font-weight: bold; }
+        .page-title {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
 
-        /* Rankings Table */
-        .main-content { padding: 15px; }
-        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-        th { text-align: left; padding: 12px; color: #666; font-size: 11px; border-bottom: 1px solid #222; }
-        td { padding: 12px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
+        .search-box {
+            width: 100%;
+            background: #151515;
+            border: 1px solid #333;
+            padding: 12px;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            outline: none;
+        }
 
-        /* Player Sections */
-        .player-info { display: flex; align-items: center; gap: 8px; }
-        .skin-head { width: 24px; height: 24px; border-radius: 3px; }
+        /* Table Style */
+        .rank-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-        /* Tier Icons (Exactly as you asked) */
-        .modes-wrapper { display: flex; gap: 12px; }
-        .mode-item { display: flex; flex-direction: column; align-items: center; }
-        .tier-img { width: 24px; height: 24px; image-rendering: pixelated; margin-bottom: 2px; }
-        .tier-tag { font-size: 8px; background: #222; padding: 1px 4px; border-radius: 3px; color: #ccc; border: 1px solid #333; }
+        .rank-table th {
+            background: #181818;
+            padding: 15px 10px;
+            text-align: left;
+            font-size: 11px;
+            color: var(--dim);
+            text-transform: uppercase;
+        }
+
+        .rank-table td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #1c1c1c;
+            font-size: 14px;
+        }
+
+        /* Player Styling */
+        .player-flex { display: flex; align-items: center; gap: 10px; }
+        .skin-icon { width: 28px; height: 28px; border-radius: 4px; border: 1px solid #333; }
+        
+        /* Tier/Emoji Styling */
+        .modes-list { display: flex; gap: 12px; flex-wrap: wrap; }
+        .mode-unit { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 2px;
+        }
+        .emoji-icon { font-size: 18px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+        .tier-label { 
+            font-size: 9px; 
+            font-weight: bold; 
+            color: #aaa; 
+            background: #252525;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        /* Points Popup */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #151515;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--green);
+            text-align: center;
+            z-index: 100;
+            width: 280px;
+        }
+        #blur {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 90;
+        }
     </style>
 </head>
 <body>
 
-    <div class="nav-container">
-        <div class="nav-btn"><img src="download.png" class="nav-icon"><span class="nav-text">Core</span></div>
-        <div class="nav-btn active"><img src="images.png" class="nav-icon"><span class="nav-text">Overall</span></div>
-        <div class="nav-btn"><img src="download (5).jpeg" class="nav-icon"><span class="nav-text">UHC</span></div>
-        <div class="nav-btn"><img src="download (1).png" class="nav-icon"><span class="nav-text">Pot</span></div>
-        <div class="nav-btn"><img src="download (6).jpeg" class="nav-icon"><span class="nav-text">Vanilla</span></div>
-        <div class="nav-btn"><img src="download (8).jpeg" class="nav-icon"><span class="nav-text">Nethpot</span></div>
-        <div class="nav-btn"><img src="download (7).jpeg" class="nav-icon"><span class="nav-text">SMP</span></div>
+    <div class="header-nav">
+        <div class="nav-item"><span>🔨</span>CORE</div>
+        <div class="nav-item active"><span>🏆</span>OVERALL</div>
+        <div class="nav-item"><span>❤️</span>UHC</div>
+        <div class="nav-item"><span>🧪</span>POT</div>
+        <div class="nav-item"><span>⚔️</span>VANILLA</div>
+        <div class="nav-item"><span>🪖</span>NETHPOT</div>
+        <div class="nav-item"><span>🔮</span>SMP</div>
     </div>
 
-    <div class="main-content">
-        <h3 style="text-align:center; color: #888; font-weight: normal;">OVERALL Rankings</h3>
-        <table>
+    <div class="container">
+        <h1 class="page-title">OVERALL RANKINGS</h1>
+        <input type="text" class="search-box" placeholder="Search for a player...">
+
+        <table class="rank-table">
             <thead>
                 <tr>
-                    <th width="30">#</th>
+                    <th>#</th>
                     <th>PLAYER</th>
                     <th>REGION</th>
                     <th>MODES</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td style="color:#444">1</td>
+            <tbody id="playerList">
+                <tr onclick="openStats('Smitenesss', 'EU', ['HT1', 'LT1'])">
+                    <td style="color:#555">1</td>
                     <td>
-                        <div class="player-info">
-                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="skin-head">
-                            <span style="color:var(--accent); font-weight:bold;">Smitenesss</span>
+                        <div class="player-flex">
+                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="skin-icon">
+                            <span style="color:var(--green); font-weight:bold;">Smitenesss</span>
                         </div>
                     </td>
-                    <td style="color:#777">EU</td>
+                    <td style="color:var(--dim)">EU</td>
                     <td>
-                        <div class="modes-wrapper">
-                            <div class="mode-item">
-                                <img src="download (8).jpeg" class="tier-img" alt="Helmet">
-                                <span class="tier-tag">HT1</span>
-                            </div>
-                            <div class="mode-item">
-                                <img src="download.png" class="tier-img" alt="Mace">
-                                <span class="tier-tag">LT1</span>
-                            </div>
+                        <div class="modes-list">
+                            <div class="mode-unit"><span class="emoji-icon">🪖</span><span class="tier-label">HT1</span></div>
+                            <div class="mode-unit"><span class="emoji-icon">🔨</span><span class="tier-label">LT1</span></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr onclick="openStats('SaumyaXtreme', 'AS', ['HT2', 'LT3'])">
+                    <td style="color:#555">2</td>
+                    <td>
+                        <div class="player-flex">
+                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="skin-icon">
+                            <span style="color:var(--red); font-weight:bold;">SaumyaXtreme</span>
+                        </div>
+                    </td>
+                    <td style="color:var(--dim)">AS</td>
+                    <td>
+                        <div class="modes-list">
+                            <div class="mode-unit"><span class="emoji-icon">🔮</span><span class="tier-label">LT3</span></div>
+                            <div class="mode-unit"><span class="emoji-icon">⚔️</span><span class="tier-label">HT2</span></div>
                         </div>
                     </td>
                 </tr>
@@ -82,5 +209,40 @@
         </table>
     </div>
 
+    <div id="blur" onclick="closeStats()"></div>
+    <div id="popup">
+        <h2 id="pop-name" style="margin-bottom:5px;"></h2>
+        <p id="pop-reg" style="color:#666; font-size:12px; margin-top:0;"></p>
+        <div style="font-size:45px; color:var(--green); font-weight:bold; margin:15px 0;" id="pop-points">0</div>
+        <p style="color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:1px;">Total Tier Points</p>
+        <button onclick="closeStats()" style="background:var(--nav); color:white; border:none; padding:10px 25px; border-radius:8px; cursor:pointer; margin-top:15px;">Close</button>
+    </div>
+
+    <script>
+        const pointsMapping = {
+            'HT1': 200, 'LT1': 180,
+            'HT2': 160, 'LT2': 140,
+            'HT3': 120, 'LT3': 100,
+            'HT4': 80,  'LT4': 60,
+            'HT5': 40,  'LT5': 20
+        };
+
+        function openStats(name, reg, tiers) {
+            let total = 0;
+            tiers.forEach(t => { total += pointsMapping[t] || 0; });
+            
+            document.getElementById('pop-name').innerText = name;
+            document.getElementById('pop-reg').innerText = "REGION: " + reg;
+            document.getElementById('pop-points').innerText = total;
+            
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('blur').style.display = 'block';
+        }
+
+        function closeStats() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('blur').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
