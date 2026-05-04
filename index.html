@@ -3,164 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McTopTier | Leaderboard</title>
+    <title>McTopTier Leaderboard</title>
     <style>
         :root {
-            --bg-color: #0b0b0b;
-            --card-bg: #111;
-            --nav-bg: #1a1a1a;
-            --text-main: #eee;
-            --text-dim: #888;
-            --accent-green: #00ff88;
+            --bg: #0a0a0a;
+            --card: #111;
+            --accent: #00ff88;
+            --text: #eee;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; }
 
-        /* Top Navigation Bar */
-        .nav-bar {
-            background: var(--nav-bg);
+        /* Navigation Icons Bar */
+        .nav-container {
             display: flex;
+            background: #151515;
+            padding: 10px;
+            gap: 15px;
             overflow-x: auto;
             border-bottom: 1px solid #222;
-        }
-        .nav-item {
-            padding: 12px 20px;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            white-space: nowrap;
-        }
-        .nav-item.active {
-            color: var(--accent-green);
-            border-bottom: 2px solid var(--accent-green);
+            justify-content: center;
         }
 
-        /* Search & Title */
-        .container { padding: 15px; }
-        .title { text-align: center; font-size: 18px; margin-bottom: 15px; }
-        .search {
-            width: 100%;
-            background: #151515;
-            border: 1px solid #333;
-            padding: 10px;
-            color: white;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+            opacity: 0.6;
+            cursor: pointer;
         }
 
-        /* Leaderboard Table */
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-dim); font-size: 11px; padding: 10px; border-bottom: 1px solid #222; }
-        td { padding: 12px 10px; border-bottom: 1px solid #181818; font-size: 13px; }
+        .nav-btn.active { opacity: 1; border-bottom: 2px solid var(--accent); }
 
-        .player-box { display: flex; align-items: center; gap: 8px; }
-        .skin { width: 26px; height: 26px; image-rendering: pixelated; border-radius: 3px; }
+        .nav-icon { width: 24px; height: 24px; margin-bottom: 5px; }
+
+        .nav-text { font-size: 9px; text-transform: uppercase; }
+
+        /* Table Styling */
+        .main-content { padding: 20px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+        th { background: #181818; color: #888; font-size: 11px; text-align: left; padding: 15px; }
+        td { padding: 15px; border-bottom: 1px solid #1c1c1c; vertical-align: middle; }
+
+        .player-cell { display: flex; align-items: center; gap: 10px; }
+        .skin-head { width: 30px; height: 30px; border-radius: 4px; }
+
+        /* Tier and Mode Icons Styling */
+        .modes-wrapper { display: flex; gap: 12px; }
+        .mode-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         
-        /* ICONS STYLING (Photo Jaisa) */
-        .modes-container { display: flex; gap: 8px; flex-wrap: wrap; }
-        .icon-group { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-width: 25px;
+        /* Photo ke jaisa icon size aur look */
+        .tier-img { 
+            width: 22px; 
+            height: 22px; 
+            image-rendering: pixelated; 
         }
-        .mc-icon {
-            width: 18px;
-            height: 18px;
-            image-rendering: pixelated;
-        }
-        .tier-label {
-            font-size: 7px;
-            font-weight: bold;
-            color: #ccc;
-            margin-top: 2px;
-            text-transform: uppercase;
+        
+        .tier-tag { 
+            font-size: 8px; 
+            font-weight: bold; 
+            color: #bbb; 
+            background: #222; 
+            padding: 1px 4px; 
+            border-radius: 3px;
         }
 
-        /* Modal popup */
-        #modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#111; padding:30px; border:1px solid var(--accent-green); z-index:100; text-align:center; border-radius:10px; width:80%; }
-        #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:90; }
+        .rank-num { font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
 
-    <div class="nav-bar">
-        <div class="nav-item">Core</div>
-        <div class="nav-item active">Overall</div>
-        <div class="nav-item">UHC</div>
-        <div class="nav-item">Pot</div>
-        <div class="nav-item">Vanilla</div>
-        <div class="nav-item">NethCP</div>
-        <div class="nav-item">SMP</div>
-        <div class="nav-item">Sword</div>
+    <div class="nav-container">
+        <div class="nav-btn"><img src="download.png" class="nav-icon"><span class="nav-text">Core</span></div>
+        <div class="nav-btn active"><img src="images.png" class="nav-icon"><span class="nav-text">Overall</span></div>
+        <div class="nav-btn"><img src="download (5).jpeg" class="nav-icon"><span class="nav-text">UHC</span></div>
+        <div class="nav-btn"><img src="download (1).png" class="nav-icon"><span class="nav-text">Pot</span></div>
+        <div class="nav-btn"><img src="download (6).jpeg" class="nav-icon"><span class="nav-text">Vanilla</span></div>
+        <div class="nav-btn"><img src="download (8).jpeg" class="nav-icon"><span class="nav-text">Nethpot</span></div>
+        <div class="nav-btn"><img src="download (7).jpeg" class="nav-icon"><span class="nav-text">SMP</span></div>
+        <div class="nav-btn"><img src="download (6).jpeg" class="nav-icon"><span class="nav-text">Sword</span></div>
     </div>
 
-    <div class="container">
-        <div class="title">OVERALL Rankings</div>
-        <input type="text" class="search" placeholder="Search player...">
-
+    <div class="main-content">
+        <h3 style="text-align: center; margin-bottom: 20px;">OVERALL Rankings</h3>
         <table>
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>PLAYER</th>
-                    <th>REGION</th>
-                    <th>MODES</th>
+                    <th width="50">#</th>
+                    <th>Player</th>
+                    <th>Region</th>
+                    <th>Modes</th>
                 </tr>
             </thead>
             <tbody>
-                <tr onclick="show('Smitenesss', 'EU', {'Crystal':'HT1', 'Sword':'LT1', 'Potion':'HT2'})">
-                    <td style="color:#666">1</td>
+                <tr>
+                    <td class="rank-num">1</td>
                     <td>
-                        <div class="player-box">
-                            <img class="skin" src="https://minotar.net/helm/Smitenesss/32.png">
-                            <span style="color:var(--accent-green)">Smitenesss</span>
+                        <div class="player-cell">
+                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="skin-head">
+                            <span style="color:var(--accent)">Smitenesss</span>
                         </div>
                     </td>
                     <td style="color:#888">EU</td>
                     <td>
-                        <div class="modes-container">
-                            <div class="icon-group">
-                                <img src="https://minecraft.wiki/images/End_Crystal_JE2_BE2.png" class="mc-icon">
-                                <span class="tier-label">HT1</span>
+                        <div class="modes-wrapper">
+                            <div class="mode-item">
+                                <img src="download (8).jpeg" class="tier-img">
+                                <span class="tier-tag">HT1</span>
                             </div>
-                            <div class="icon-group">
-                                <img src="https://minecraft.wiki/images/Netherite_Sword_JE2_BE2.png" class="mc-icon">
-                                <span class="tier-label">LT1</span>
+                            <div class="mode-item">
+                                <img src="download.png" class="tier-img">
+                                <span class="tier-tag">LT1</span>
                             </div>
-                            <div class="icon-group">
-                                <img src="https://minecraft.wiki/images/Potion_of_Healing_JE2_BE2.png" class="mc-icon">
-                                <span class="tier-label">HT2</span>
+                            <div class="mode-item">
+                                <img src="download (5).jpeg" class="tier-img">
+                                <span class="tier-tag">HT2</span>
                             </div>
                         </div>
                     </td>
                 </tr>
 
-                <tr onclick="show('SaumyaXtreme', 'AS', {'Axe':'HT2', 'Pearl':'LT3'})">
-                    <td style="color:#666">2</td>
+                <tr>
+                    <td class="rank-num">2</td>
                     <td>
-                        <div class="player-box">
-                            <img class="skin" src="https://minotar.net/helm/SaumyaXtreme/32.png">
+                        <div class="player-cell">
+                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="skin-head">
                             <span style="color:#ff4444">SaumyaXtreme</span>
                         </div>
                     </td>
                     <td style="color:#888">AS</td>
                     <td>
-                        <div class="modes-container">
-                            <div class="icon-group">
-                                <img src="https://minecraft.wiki/images/Netherite_Axe_JE2_BE2.png" class="mc-icon">
-                                <span class="tier-label">HT2</span>
+                        <div class="modes-wrapper">
+                            <div class="mode-item">
+                                <img src="download (7).jpeg" class="tier-img">
+                                <span class="tier-tag">LT3</span>
                             </div>
-                            <div class="icon-group">
-                                <img src="https://minecraft.wiki/images/Ender_Pearl_JE2_BE2.png" class="mc-icon">
-                                <span class="tier-label">LT3</span>
+                            <div class="mode-item">
+                                <img src="download (6).jpeg" class="tier-img">
+                                <span class="tier-tag">HT2</span>
                             </div>
                         </div>
                     </td>
@@ -169,31 +150,5 @@
         </table>
     </div>
 
-    <div id="overlay" onclick="hide()"></div>
-    <div id="modal">
-        <h2 id="p-name"></h2>
-        <h1 style="color:var(--accent-green); font-size:40px;"><span id="p-points">0</span></h1>
-        <p style="color:#888">Total Points</p>
-        <button onclick="hide()" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px;">Close</button>
-    </div>
-
-    <script>
-        const pts = {'LT5':20,'HT5':40,'LT4':60,'HT4':80,'LT3':100,'HT3':120,'LT2':140,'HT2':160,'LT1':180,'HT1':200};
-
-        function show(name, reg, tiersObj) {
-            let total = 0;
-            for(let key in tiersObj) {
-                total += pts[tiersObj[key]] || 0;
-            }
-            document.getElementById('p-name').innerText = name;
-            document.getElementById('p-points').innerText = total;
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-        function hide() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
