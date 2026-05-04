@@ -5,71 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>McTopTier Leaderboard</title>
     <style>
-        :root {
-            --bg: #0a0a0a;
-            --card: #111;
-            --accent: #00ff88;
-            --text: #eee;
-        }
-
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; }
-
-        /* Navigation Icons Bar */
-        .nav-container {
-            display: flex;
-            background: #151515;
-            padding: 10px;
-            gap: 15px;
-            overflow-x: auto;
-            border-bottom: 1px solid #222;
-            justify-content: center;
-        }
-
-        .nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 50px;
-            opacity: 0.6;
-            cursor: pointer;
-        }
-
+        :root { --bg: #0a0a0a; --card: #111; --accent: #00ff88; --text: #eee; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; }
+        
+        /* Navigation Bar */
+        .nav-container { display: flex; background: #151515; padding: 10px; gap: 10px; overflow-x: auto; border-bottom: 1px solid #222; }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; min-width: 60px; opacity: 0.7; cursor: pointer; }
         .nav-btn.active { opacity: 1; border-bottom: 2px solid var(--accent); }
+        .nav-icon { width: 22px; height: 22px; object-fit: contain; margin-bottom: 4px; }
+        .nav-text { font-size: 9px; text-transform: uppercase; font-weight: bold; }
 
-        .nav-icon { width: 24px; height: 24px; margin-bottom: 5px; }
-
-        .nav-text { font-size: 9px; text-transform: uppercase; }
-
-        /* Table Styling */
-        .main-content { padding: 20px; }
+        /* Rankings Table */
+        .main-content { padding: 15px; }
         table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-        th { background: #181818; color: #888; font-size: 11px; text-align: left; padding: 15px; }
-        td { padding: 15px; border-bottom: 1px solid #1c1c1c; vertical-align: middle; }
+        th { text-align: left; padding: 12px; color: #666; font-size: 11px; border-bottom: 1px solid #222; }
+        td { padding: 12px; border-bottom: 1px solid #1a1a1a; font-size: 13px; }
 
-        .player-cell { display: flex; align-items: center; gap: 10px; }
-        .skin-head { width: 30px; height: 30px; border-radius: 4px; }
+        /* Player Sections */
+        .player-info { display: flex; align-items: center; gap: 8px; }
+        .skin-head { width: 24px; height: 24px; border-radius: 3px; }
 
-        /* Tier and Mode Icons Styling */
+        /* Tier Icons (Exactly as you asked) */
         .modes-wrapper { display: flex; gap: 12px; }
-        .mode-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        
-        /* Photo ke jaisa icon size aur look */
-        .tier-img { 
-            width: 22px; 
-            height: 22px; 
-            image-rendering: pixelated; 
-        }
-        
-        .tier-tag { 
-            font-size: 8px; 
-            font-weight: bold; 
-            color: #bbb; 
-            background: #222; 
-            padding: 1px 4px; 
-            border-radius: 3px;
-        }
-
-        .rank-num { font-weight: bold; color: #555; }
+        .mode-item { display: flex; flex-direction: column; align-items: center; }
+        .tier-img { width: 24px; height: 24px; image-rendering: pixelated; margin-bottom: 2px; }
+        .tier-tag { font-size: 8px; background: #222; padding: 1px 4px; border-radius: 3px; color: #ccc; border: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -82,66 +42,38 @@
         <div class="nav-btn"><img src="download (6).jpeg" class="nav-icon"><span class="nav-text">Vanilla</span></div>
         <div class="nav-btn"><img src="download (8).jpeg" class="nav-icon"><span class="nav-text">Nethpot</span></div>
         <div class="nav-btn"><img src="download (7).jpeg" class="nav-icon"><span class="nav-text">SMP</span></div>
-        <div class="nav-btn"><img src="download (6).jpeg" class="nav-icon"><span class="nav-text">Sword</span></div>
     </div>
 
     <div class="main-content">
-        <h3 style="text-align: center; margin-bottom: 20px;">OVERALL Rankings</h3>
+        <h3 style="text-align:center; color: #888; font-weight: normal;">OVERALL Rankings</h3>
         <table>
             <thead>
                 <tr>
-                    <th width="50">#</th>
-                    <th>Player</th>
-                    <th>Region</th>
-                    <th>Modes</th>
+                    <th width="30">#</th>
+                    <th>PLAYER</th>
+                    <th>REGION</th>
+                    <th>MODES</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="rank-num">1</td>
+                    <td style="color:#444">1</td>
                     <td>
-                        <div class="player-cell">
+                        <div class="player-info">
                             <img src="https://minotar.net/helm/Smitenesss/32.png" class="skin-head">
-                            <span style="color:var(--accent)">Smitenesss</span>
+                            <span style="color:var(--accent); font-weight:bold;">Smitenesss</span>
                         </div>
                     </td>
-                    <td style="color:#888">EU</td>
+                    <td style="color:#777">EU</td>
                     <td>
                         <div class="modes-wrapper">
                             <div class="mode-item">
-                                <img src="download (8).jpeg" class="tier-img">
+                                <img src="download (8).jpeg" class="tier-img" alt="Helmet">
                                 <span class="tier-tag">HT1</span>
                             </div>
                             <div class="mode-item">
-                                <img src="download.png" class="tier-img">
+                                <img src="download.png" class="tier-img" alt="Mace">
                                 <span class="tier-tag">LT1</span>
-                            </div>
-                            <div class="mode-item">
-                                <img src="download (5).jpeg" class="tier-img">
-                                <span class="tier-tag">HT2</span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="rank-num">2</td>
-                    <td>
-                        <div class="player-cell">
-                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="skin-head">
-                            <span style="color:#ff4444">SaumyaXtreme</span>
-                        </div>
-                    </td>
-                    <td style="color:#888">AS</td>
-                    <td>
-                        <div class="modes-wrapper">
-                            <div class="mode-item">
-                                <img src="download (7).jpeg" class="tier-img">
-                                <span class="tier-tag">LT3</span>
-                            </div>
-                            <div class="mode-item">
-                                <img src="download (6).jpeg" class="tier-img">
-                                <span class="tier-tag">HT2</span>
                             </div>
                         </div>
                     </td>
