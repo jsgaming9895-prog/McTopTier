@@ -3,38 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McTopTier | Minecraft Edition</title>
+    <title>McTopTier | Custom Edition</title>
     <style>
-        /* Minecraft Font Style */
         @import url('https://fonts.cdnfonts.com/css/minecraftia');
 
         :root {
             --mc-green: #55FF55;
-            --mc-dark-green: #00AA00;
             --mc-bg: #1e1e1e;
             --mc-panel: #313131;
-            --mc-border: #000000;
-            --mc-shadow: #555555;
+            --mc-border: #000;
         }
 
         body {
             background-color: var(--mc-bg);
-            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Subtle texture */
             color: white;
             font-family: 'Minecraftia', sans-serif;
             margin: 0;
-            padding: 0;
             image-rendering: pixelated;
         }
 
-        /* Minecraft Style Navbar */
+        /* Nav Bar with SVG Icons */
         .mc-nav {
             background: #484848;
             border-bottom: 4px solid var(--mc-border);
             display: flex;
             overflow-x: auto;
-            padding: 5px;
-            gap: 5px;
+            padding: 10px;
+            gap: 8px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -43,53 +38,26 @@
         .nav-btn {
             background: #7e7e7e;
             border: 3px solid var(--mc-border);
-            box-shadow: inset -3px -3px var(--mc-shadow), inset 3px 3px #ffffff33;
-            padding: 10px 15px;
-            color: #DDD;
-            text-shadow: 2px 2px var(--mc-border);
-            font-size: 10px;
-            cursor: pointer;
-            white-space: nowrap;
+            box-shadow: inset -3px -3px #555, inset 3px 3px #ffffff33;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #DDD;
+            text-shadow: 2px 2px #000;
+            font-size: 9px;
+            white-space: nowrap;
         }
 
         .nav-btn.active {
-            background: var(--mc-dark-green);
+            background: #00AA00;
             color: var(--mc-green);
-            box-shadow: inset -3px -3px #006400, inset 3px 3px #ffffff33;
         }
 
-        .nav-btn:active {
-            transform: translateY(2px);
-            box-shadow: inset 3px 3px var(--mc-border);
-        }
+        .icon-svg { width: 20px; height: 20px; }
 
-        /* Container */
-        .container { padding: 20px; max-width: 900px; margin: auto; }
-
-        .title-box {
-            text-align: center;
-            text-shadow: 3px 3px var(--mc-border);
-            color: var(--mc-green);
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* Search Input */
-        .mc-input {
-            width: 100%;
-            background: #000;
-            border: 3px solid #555;
-            padding: 12px;
-            color: var(--mc-green);
-            font-family: 'Minecraftia', sans-serif;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-        }
-
-        /* Minecraft Table */
+        /* Main Table Area */
+        .container { padding: 15px; }
         .mc-table {
             width: 100%;
             border-collapse: collapse;
@@ -97,127 +65,76 @@
             background: var(--mc-panel);
         }
 
-        .mc-table th {
-            background: #252525;
-            border: 2px solid var(--mc-border);
-            padding: 12px;
-            text-align: left;
-            font-size: 11px;
-            color: #AAA;
-        }
+        .mc-table th { background: #252525; padding: 12px; font-size: 10px; color: #AAA; text-align: left; }
+        .mc-table td { padding: 12px 10px; border: 2px solid #222; }
 
-        .mc-table tr:nth-child(even) { background: #3a3a3a; }
+        .player-box { display: flex; align-items: center; gap: 10px; }
+        .head { width: 28px; height: 28px; border: 2px solid #000; }
 
-        .mc-table td {
-            padding: 15px 10px;
-            border: 2px solid #222;
-        }
+        /* Tiers with SVG Icons */
+        .tiers-flex { display: flex; gap: 12px; }
+        .mode-unit { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .tier-icon { width: 24px; height: 24px; }
+        .tier-label { font-size: 8px; background: #000; padding: 2px 5px; border: 1px solid #555; }
 
-        /* Player Graphics */
-        .player-row { display: flex; align-items: center; gap: 12px; }
-        .head-img { 
-            width: 32px; height: 32px; 
-            border: 2px solid var(--mc-border);
-            image-rendering: pixelated;
-        }
-
-        /* Mode & Tiers */
-        .tier-wrap { display: flex; gap: 15px; }
-        .mode-box { display: flex; flex-direction: column; align-items: center; }
-        .emoji { font-size: 20px; margin-bottom: 2px; }
-        .label { 
-            font-size: 8px; 
-            background: #000; 
-            color: #FFF; 
-            padding: 2px 5px; 
-            border: 1px solid #555;
-        }
-
-        /* Modal / GUI */
-        #gui-blur {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 1000;
-        }
-
+        /* GUI Popup */
+        #gui-blur { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }
         #mc-modal {
-            display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: #C6C6C6; /* Classic Inventory Color */
-            border: 4px solid var(--mc-border);
-            box-shadow: inset -4px -4px #555, inset 4px 4px #FFF;
-            padding: 30px; width: 300px; z-index: 1001; text-align: center;
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #C6C6C6; border: 4px solid #000; box-shadow: inset -4px -4px #555, inset 4px 4px #FFF;
+            padding: 25px; width: 280px; z-index: 1001; text-align: center;
         }
-
-        .mc-button {
-            background: #7e7e7e;
-            border: 3px solid var(--mc-border);
-            padding: 10px;
-            width: 100%;
-            color: white;
-            font-family: 'Minecraftia', sans-serif;
-            margin-top: 20px;
-            text-shadow: 2px 2px #000;
-            cursor: pointer;
-        }
-
-        .mc-button:hover { background: #8e8e8e; }
     </style>
 </head>
 <body>
 
     <div class="mc-nav">
-        <div class="nav-btn"><span>🏆</span>Overall</div>
-        <div class="nav-btn active"><span>🧪</span>Pot</div>
-        <div class="nav-btn"><span>⚔️</span>Sword</div>
-        <div class="nav-btn"><span>❤️</span>UHC</div>
-        <div class="nav-btn"><span>🪖</span>Nether</div>
-        <div class="nav-btn"><span>🔮</span>SMP</div>
+        <div class="nav-btn active"><img src="vanilla.svg" class="icon-svg">Overall</div>
+        <div class="nav-btn"><img src="uhc.svg" class="icon-svg">UHC</div>
+        <div class="nav-btn"><img src="pot.svg" class="icon-svg">Pot</div>
+        <div class="nav-btn"><img src="sword.svg" class="icon-svg">Sword</div>
+        <div class="nav-btn"><img src="nethop.svg" class="icon-svg">Nether</div>
+        <div class="nav-btn"><img src="smp.svg" class="icon-svg">SMP</div>
     </div>
 
     <div class="container">
-        <h1 class="title-box">OVERALL RANKINGS</h1>
-        <input type="text" class="mc-input" placeholder="Search Player...">
-
+        <h2 style="text-align: center; text-shadow: 2px 2px #000; color: var(--mc-green);">OVERALL RANKINGS</h2>
         <table class="mc-table">
             <thead>
                 <tr>
-                    <th width="40">#</th>
+                    <th>#</th>
                     <th>Player</th>
-                    <th>Region</th>
                     <th>Tiers</th>
                 </tr>
             </thead>
             <tbody>
-                <tr onclick="showStats('Smitenesss', 'EU', 380)">
-                    <td style="color:#AAA">1</td>
+                <tr onclick="showStats('Smitenesss', 400)">
+                    <td>1</td>
                     <td>
-                        <div class="player-row">
-                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="head-img">
+                        <div class="player-box">
+                            <img src="https://minotar.net/helm/Smitenesss/32.png" class="head">
                             <span style="color:var(--mc-green)">Smitenesss</span>
                         </div>
                     </td>
-                    <td style="color:#AAA">EU</td>
                     <td>
-                        <div class="tier-wrap">
-                            <div class="mode-box"><span class="emoji">🪖</span><span class="label">HT1</span></div>
-                            <div class="mode-box"><span class="emoji">🧪</span><span class="label">LT1</span></div>
+                        <div class="tiers-flex">
+                            <div class="mode-unit"><img src="nethop.svg" class="tier-icon"><span class="tier-label">HT1</span></div>
+                            <div class="mode-unit"><img src="mace.svg" class="tier-icon"><span class="tier-label">LT1</span></div>
                         </div>
                     </td>
                 </tr>
-
-                <tr onclick="showStats('SaumyaXtreme', 'AS', 260)">
-                    <td style="color:#AAA">2</td>
+                <tr onclick="showStats('SaumyaXtreme', 280)">
+                    <td>2</td>
                     <td>
-                        <div class="player-row">
-                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="head-img">
+                        <div class="player-box">
+                            <img src="https://minotar.net/helm/SaumyaXtreme/32.png" class="head">
                             <span style="color:#FF5555">SaumyaXtreme</span>
                         </div>
                     </td>
-                    <td style="color:#AAA">AS</td>
                     <td>
-                        <div class="tier-wrap">
-                            <div class="mode-box"><span class="emoji">🔮</span><span class="label">LT3</span></div>
-                            <div class="mode-box"><span class="emoji">⚔️</span><span class="label">HT2</span></div>
+                        <div class="tiers-flex">
+                            <div class="mode-unit"><img src="axe.svg" class="tier-icon"><span class="tier-label">HT2</span></div>
+                            <div class="mode-unit"><img src="smp.svg" class="tier-icon"><span class="tier-label">LT3</span></div>
                         </div>
                     </td>
                 </tr>
@@ -225,27 +142,24 @@
         </table>
     </div>
 
-    <div id="gui-blur" onclick="hideStats()"></div>
+    <div id="gui-blur" onclick="hide()"></div>
     <div id="mc-modal">
-        <h2 id="p-name" style="color:#373737; text-shadow:none; margin:0;">Player</h2>
-        <p id="p-reg" style="color:#555; font-size:10px; margin-bottom:15px;">REGION</p>
-        <div style="background:#000; border:2px solid #555; padding:15px;">
-            <span style="color:#AAA; font-size:10px;">TOTAL POINTS</span><br>
-            <span id="p-points" style="color:var(--mc-green); font-size:32px;">0</span>
+        <h2 id="p-name" style="color:#333; margin:0;">Name</h2>
+        <div style="background:#000; padding:15px; margin-top:15px; border:2px solid #555;">
+            <span style="color:#AAA; font-size:10px;">POINTS</span><br>
+            <span id="p-points" style="color:var(--mc-green); font-size:30px;">0</span>
         </div>
-        <button class="mc-button" onclick="hideStats()">DONE</button>
+        <button onclick="hide()" style="width:100%; margin-top:15px; background:#7e7e7e; border:3px solid #000; color:white; padding:8px; font-family:'Minecraftia'; cursor:pointer;">DONE</button>
     </div>
 
     <script>
-        function showStats(name, reg, points) {
+        function showStats(name, pts) {
             document.getElementById('p-name').innerText = name;
-            document.getElementById('p-reg').innerText = "REGION: " + reg;
-            document.getElementById('p-points').innerText = points;
+            document.getElementById('p-points').innerText = pts;
             document.getElementById('mc-modal').style.display = 'block';
             document.getElementById('gui-blur').style.display = 'block';
         }
-
-        function hideStats() {
+        function hide() {
             document.getElementById('mc-modal').style.display = 'none';
             document.getElementById('gui-blur').style.display = 'none';
         }
