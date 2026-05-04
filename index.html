@@ -5,148 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>McTopTier | Leaderboard</title>
     <style>
-        /* Base Styles */
         :root {
             --bg-color: #0b0b0b;
-            --card-bg: #111111;
-            --navbar-bg: #1a1a1a;
-            --text-color: #f0f0f0;
+            --card-bg: #111;
+            --nav-bg: #1a1a1a;
+            --text-main: #eee;
+            --text-dim: #888;
             --accent-green: #00ff88;
-            --accent-blue: #3498db;
-            --accent-red: #ff4444;
-            --border-color: #2a2a2a;
-            --sub-text: #888;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            font-family: sans-serif;
             margin: 0;
-            padding: 10px;
+            padding: 0;
         }
 
-        /* 1. SECTIONS NAVBAR (Like Photo) */
-        .sections-nav {
-            background-color: var(--navbar-bg);
-            padding: 8px 5px;
+        /* Top Navigation Bar */
+        .nav-bar {
+            background: var(--nav-bg);
             display: flex;
-            justify-content: space-around;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 15px;
+            overflow-x: auto;
+            border-bottom: 1px solid #222;
         }
-
         .nav-item {
-            text-transform: uppercase;
+            padding: 12px 20px;
             font-size: 10px;
-            color: var(--sub-text);
-            cursor: pointer;
-            padding: 5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            white-space: nowrap;
         }
-
         .nav-item.active {
             color: var(--accent-green);
-            font-weight: bold;
             border-bottom: 2px solid var(--accent-green);
         }
 
-        /* 2. HEADER AREA */
-        .header-area {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .main-title {
-            font-size: 20px;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-        }
-
-        .search-bar {
-            width: 90%;
-            background: #111;
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 0 auto;
-            display: block;
-        }
-
-        /* 3. TABLE LAYOUT */
-        .leaderboard-table {
+        /* Search & Title */
+        .container { padding: 15px; }
+        .title { text-align: center; font-size: 18px; margin-bottom: 15px; }
+        .search {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .leaderboard-table th {
-            text-align: left;
-            color: var(--sub-text);
-            text-transform: uppercase;
+            background: #151515;
+            border: 1px solid #333;
             padding: 10px;
-            border-bottom: 1px solid var(--border-color);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
         }
 
-        .leaderboard-table tr {
-            border-bottom: 1px solid #1a1a1a;
-            cursor: pointer;
-        }
+        /* Leaderboard Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: var(--text-dim); font-size: 11px; padding: 10px; border-bottom: 1px solid #222; }
+        td { padding: 12px 10px; border-bottom: 1px solid #181818; font-size: 13px; }
 
-        .leaderboard-table td {
-            padding: 12px 10px;
+        .player-box { display: flex; align-items: center; gap: 8px; }
+        .skin { width: 26px; height: 26px; image-rendering: pixelated; border-radius: 3px; }
+        
+        /* ICONS STYLING (Photo Jaisa) */
+        .modes-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .icon-group { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-width: 25px;
         }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .skin-head {
-            width: 28px;
-            height: 28px;
+        .mc-icon {
+            width: 18px;
+            height: 18px;
             image-rendering: pixelated;
-            border-radius: 4px;
         }
-
-        .rank-num {
+        .tier-label {
+            font-size: 7px;
             font-weight: bold;
-            color: var(--sub-text);
-            width: 20px;
-        }
-
-        .player-region {
-            color: var(--sub-text);
+            color: #ccc;
+            margin-top: 2px;
             text-transform: uppercase;
         }
 
-        /* 4. MODES & ICONS */
-        .modes-list {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        /* Simple Text Placeholders for Icons */
-        .icon-placeholder {
-            background: #222;
-            color: #ccc;
-            font-size: 10px;
-            padding: 3px 6px;
-            border-radius: 4px;
-            border: 1px solid #444;
-        }
-
-        /* Simple Modal */
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 20px; border: 1px solid var(--accent-green); border-radius: 10px; z-index: 1000; width: 80%; max-width: 300px; text-align: center; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
-        .tier-badge { background: #222; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: 1px solid #444; margin: 3px; }
+        /* Modal popup */
+        #modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#111; padding:30px; border:1px solid var(--accent-green); z-index:100; text-align:center; border-radius:10px; width:80%; }
+        #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:90; }
     </style>
 </head>
 <body>
 
-    <div class="sections-nav">
+    <div class="nav-bar">
         <div class="nav-item">Core</div>
         <div class="nav-item active">Overall</div>
         <div class="nav-item">UHC</div>
@@ -157,92 +102,95 @@
         <div class="nav-item">Sword</div>
     </div>
 
-    <div class="header-area">
-        <h1 class="main-title">OVERALL Rankings</h1>
-        <input type="text" class="search-bar" placeholder="Search player...">
+    <div class="container">
+        <div class="title">OVERALL Rankings</div>
+        <input type="text" class="search" placeholder="Search player...">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>PLAYER</th>
+                    <th>REGION</th>
+                    <th>MODES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr onclick="show('Smitenesss', 'EU', {'Crystal':'HT1', 'Sword':'LT1', 'Potion':'HT2'})">
+                    <td style="color:#666">1</td>
+                    <td>
+                        <div class="player-box">
+                            <img class="skin" src="https://minotar.net/helm/Smitenesss/32.png">
+                            <span style="color:var(--accent-green)">Smitenesss</span>
+                        </div>
+                    </td>
+                    <td style="color:#888">EU</td>
+                    <td>
+                        <div class="modes-container">
+                            <div class="icon-group">
+                                <img src="https://minecraft.wiki/images/End_Crystal_JE2_BE2.png" class="mc-icon">
+                                <span class="tier-label">HT1</span>
+                            </div>
+                            <div class="icon-group">
+                                <img src="https://minecraft.wiki/images/Netherite_Sword_JE2_BE2.png" class="mc-icon">
+                                <span class="tier-label">LT1</span>
+                            </div>
+                            <div class="icon-group">
+                                <img src="https://minecraft.wiki/images/Potion_of_Healing_JE2_BE2.png" class="mc-icon">
+                                <span class="tier-label">HT2</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr onclick="show('SaumyaXtreme', 'AS', {'Axe':'HT2', 'Pearl':'LT3'})">
+                    <td style="color:#666">2</td>
+                    <td>
+                        <div class="player-box">
+                            <img class="skin" src="https://minotar.net/helm/SaumyaXtreme/32.png">
+                            <span style="color:#ff4444">SaumyaXtreme</span>
+                        </div>
+                    </td>
+                    <td style="color:#888">AS</td>
+                    <td>
+                        <div class="modes-container">
+                            <div class="icon-group">
+                                <img src="https://minecraft.wiki/images/Netherite_Axe_JE2_BE2.png" class="mc-icon">
+                                <span class="tier-label">HT2</span>
+                            </div>
+                            <div class="icon-group">
+                                <img src="https://minecraft.wiki/images/Ender_Pearl_JE2_BE2.png" class="mc-icon">
+                                <span class="tier-label">LT3</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <table class="leaderboard-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Player</th>
-                <th>Region</th>
-                <th>Modes</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr onclick="showStats('Smitenesss', 'EU', ['HT1','LT1'])">
-                <td class="rank-num">1</td>
-                <td>
-                    <div class="player-info">
-                        <img class="skin-head" src="https://minotar.net/helm/Smitenesss/32.png" alt="skin">
-                        <span style="font-weight: bold; color: var(--accent-green);">Smitenesss</span>
-                    </div>
-                </td>
-                <td class="player-region">EU</td>
-                <td>
-                    <div class="modes-list">
-                        <span class="icon-placeholder">HT1</span>
-                        <span class="icon-placeholder">LT1</span>
-                    </div>
-                </td>
-            </tr>
-            <tr onclick="showStats('SaumyaXtreme', 'AS', ['HT2','LT3'])">
-                <td class="rank-num">2</td>
-                <td>
-                    <div class="player-info">
-                        <img class="skin-head" src="https://minotar.net/helm/SaumyaXtreme/32.png" alt="skin">
-                        <span style="font-weight: bold; color: var(--accent-red);">SaumyaXtreme</span>
-                    </div>
-                </td>
-                <td class="player-region">AS</td>
-                <td>
-                    <div class="modes-list">
-                        <span class="icon-placeholder">HT2</span>
-                        <span class="icon-placeholder">LT3</span>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="overlay" id="overlay" onclick="closeModal()"></div>
-    <div class="modal" id="modal">
-        <h2 id="m-name" style="color:var(--accent-green);">Player</h2>
-        <p id="m-region" style="color:var(--sub-text);">Region</p>
-        <hr style="border:0; border-top:1px solid #333;">
-        <h3 style="color:white; font-size:24px; margin:10px 0;">Points: <span id="m-points" style="color:var(--accent-green);">0</span></h3>
-        <div id="m-tiers">Tiers will go here</div>
-        <button onclick="closeModal()" style="margin-top:15px; background:#333; color:white; border:none; padding:8px 20px; border-radius:5px; cursor:pointer;">Close</button>
+    <div id="overlay" onclick="hide()"></div>
+    <div id="modal">
+        <h2 id="p-name"></h2>
+        <h1 style="color:var(--accent-green); font-size:40px;"><span id="p-points">0</span></h1>
+        <p style="color:#888">Total Points</p>
+        <button onclick="hide()" style="background:#333; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:10px;">Close</button>
     </div>
 
     <script>
-        const pointsData = {
-            'LT5': 20, 'HT5': 40, 'LT4': 60, 'HT4': 80,
-            'LT3': 100, 'HT3': 120, 'LT2': 140, 'HT2': 160,
-            'LT1': 180, 'HT1': 200
-        };
+        const pts = {'LT5':20,'HT5':40,'LT4':60,'HT4':80,'LT3':100,'HT3':120,'LT2':140,'HT2':160,'LT1':180,'HT1':200};
 
-        function showStats(name, region, tiers) {
+        function show(name, reg, tiersObj) {
             let total = 0;
-            let tierListHtml = '';
-            
-            tiers.forEach(t => {
-                total += pointsData[t] || 0;
-                tierListHtml += `<span class="tier-badge">${t}</span> `;
-            });
-
-            document.getElementById('m-name').innerText = name;
-            document.getElementById('m-region').innerText = "Region: " + region;
-            document.getElementById('m-points').innerText = total;
-            document.getElementById('m-tiers').innerHTML = tierListHtml;
-            
+            for(let key in tiersObj) {
+                total += pts[tiersObj[key]] || 0;
+            }
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-points').innerText = total;
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
         }
-
-        function closeModal() {
+        function hide() {
             document.getElementById('modal').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
