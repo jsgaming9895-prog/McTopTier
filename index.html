@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>McTopTier | Leaderboard</title>
     <style>
+        /* Base Styles */
         :root {
             --bg-color: #0b0b0b;
-            --card-bg: #151515;
-            --text-color: #ffffff;
+            --card-bg: #111111;
+            --navbar-bg: #1a1a1a;
+            --text-color: #f0f0f0;
             --accent-green: #00ff88;
-            --border-color: #333;
+            --accent-blue: #3498db;
+            --accent-red: #ff4444;
+            --border-color: #2a2a2a;
+            --sub-text: #888;
         }
 
         body {
@@ -18,111 +23,146 @@
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
 
-        .header {
+        /* 1. SECTIONS NAVBAR (Like Photo) */
+        .sections-nav {
+            background-color: var(--navbar-bg);
+            padding: 8px 5px;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .nav-item {
+            text-transform: uppercase;
+            font-size: 10px;
+            color: var(--sub-text);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-item.active {
+            color: var(--accent-green);
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent-green);
+        }
+
+        /* 2. HEADER AREA */
+        .header-area {
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        /* Search Bar */
-        .search-container {
             margin-bottom: 20px;
-            text-align: center;
         }
-        input {
-            background: #1a1a1a;
+
+        .main-title {
+            font-size: 20px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .search-bar {
+            width: 90%;
+            background: #111;
             border: 1px solid var(--border-color);
             color: white;
             padding: 10px;
-            width: 80%;
             border-radius: 5px;
+            margin: 0 auto;
+            display: block;
         }
 
-        /* Leaderboard Table */
-        table {
+        /* 3. TABLE LAYOUT */
+        .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
+            font-size: 13px;
         }
 
-        th {
-            background: #1a1a1a;
-            color: #888;
-            padding: 15px;
+        .leaderboard-table th {
             text-align: left;
+            color: var(--sub-text);
             text-transform: uppercase;
-            font-size: 12px;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #222;
+        .leaderboard-table tr {
+            border-bottom: 1px solid #1a1a1a;
+            cursor: pointer;
         }
 
-        .player-cell {
+        .leaderboard-table td {
+            padding: 12px 10px;
+        }
+
+        .player-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .skin-head {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             image-rendering: pixelated;
-        }
-
-        .rank-num { font-weight: bold; color: #aaa; }
-        .player-name { font-weight: bold; cursor: pointer; color: #3498db; }
-        .region { color: #888; }
-
-        /* Points Logic & Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--card-bg);
-            padding: 20px;
-            border: 2px solid var(--accent-green);
-            border-radius: 15px;
-            z-index: 100;
-            width: 300px;
-            text-align: center;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 99;
-        }
-
-        .tier-badge {
-            background: #222;
-            padding: 2px 8px;
             border-radius: 4px;
+        }
+
+        .rank-num {
+            font-weight: bold;
+            color: var(--sub-text);
+            width: 20px;
+        }
+
+        .player-region {
+            color: var(--sub-text);
+            text-transform: uppercase;
+        }
+
+        /* 4. MODES & ICONS */
+        .modes-list {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        /* Simple Text Placeholders for Icons */
+        .icon-placeholder {
+            background: #222;
+            color: #ccc;
             font-size: 10px;
-            margin-right: 5px;
+            padding: 3px 6px;
+            border-radius: 4px;
             border: 1px solid #444;
         }
+
+        /* Simple Modal */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 20px; border: 1px solid var(--accent-green); border-radius: 10px; z-index: 1000; width: 80%; max-width: 300px; text-align: center; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
+        .tier-badge { background: #222; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: 1px solid #444; margin: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>OVERALL Rankings</h1>
+    <div class="sections-nav">
+        <div class="nav-item">Core</div>
+        <div class="nav-item active">Overall</div>
+        <div class="nav-item">UHC</div>
+        <div class="nav-item">Pot</div>
+        <div class="nav-item">Vanilla</div>
+        <div class="nav-item">NethCP</div>
+        <div class="nav-item">SMP</div>
+        <div class="nav-item">Sword</div>
     </div>
 
-    <div class="search-container">
-        <input type="text" placeholder="Search player...">
+    <div class="header-area">
+        <h1 class="main-title">OVERALL Rankings</h1>
+        <input type="text" class="search-bar" placeholder="Search player...">
     </div>
 
-    <table>
+    <table class="leaderboard-table">
         <thead>
             <tr>
                 <th>#</th>
@@ -131,33 +171,37 @@
                 <th>Modes</th>
             </tr>
         </thead>
-        <tbody id="leaderboard">
-            <tr onclick="showStats('Smitenesss', 'EU', 'HT1', 'LT1')">
+        <tbody>
+            <tr onclick="showStats('Smitenesss', 'EU', ['HT1','LT1'])">
                 <td class="rank-num">1</td>
                 <td>
-                    <div class="player-cell">
+                    <div class="player-info">
                         <img class="skin-head" src="https://minotar.net/helm/Smitenesss/32.png" alt="skin">
-                        <span class="player-name" style="color: #00ff88;">Smitenesss</span>
+                        <span style="font-weight: bold; color: var(--accent-green);">Smitenesss</span>
                     </div>
                 </td>
-                <td class="region">EU</td>
+                <td class="player-region">EU</td>
                 <td>
-                    <span class="tier-badge">HT1</span>
-                    <span class="tier-badge">LT1</span>
+                    <div class="modes-list">
+                        <span class="icon-placeholder">HT1</span>
+                        <span class="icon-placeholder">LT1</span>
+                    </div>
                 </td>
             </tr>
-            <tr onclick="showStats('SaumyaXtreme', 'AS', 'HT2', 'LT3')">
+            <tr onclick="showStats('SaumyaXtreme', 'AS', ['HT2','LT3'])">
                 <td class="rank-num">2</td>
                 <td>
-                    <div class="player-cell">
+                    <div class="player-info">
                         <img class="skin-head" src="https://minotar.net/helm/SaumyaXtreme/32.png" alt="skin">
-                        <span class="player-name" style="color: #ff4444;">SaumyaXtreme</span>
+                        <span style="font-weight: bold; color: var(--accent-red);">SaumyaXtreme</span>
                     </div>
                 </td>
-                <td class="region">AS</td>
+                <td class="player-region">AS</td>
                 <td>
-                    <span class="tier-badge">HT2</span>
-                    <span class="tier-badge">LT3</span>
+                    <div class="modes-list">
+                        <span class="icon-placeholder">HT2</span>
+                        <span class="icon-placeholder">LT3</span>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -165,34 +209,34 @@
 
     <div class="overlay" id="overlay" onclick="closeModal()"></div>
     <div class="modal" id="modal">
-        <h2 id="m-name"></h2>
-        <p id="m-region"></p>
-        <hr style="border: 0.5px solid #333">
-        <h3 style="color: var(--accent-green)">Points: <span id="m-points">0</span></h3>
-        <div id="m-tiers" style="margin-top: 10px;"></div>
-        <button onclick="closeModal()" style="margin-top: 15px; background: #444; color: white; border: none; padding: 5px 15px; border-radius: 5px;">Close</button>
+        <h2 id="m-name" style="color:var(--accent-green);">Player</h2>
+        <p id="m-region" style="color:var(--sub-text);">Region</p>
+        <hr style="border:0; border-top:1px solid #333;">
+        <h3 style="color:white; font-size:24px; margin:10px 0;">Points: <span id="m-points" style="color:var(--accent-green);">0</span></h3>
+        <div id="m-tiers">Tiers will go here</div>
+        <button onclick="closeModal()" style="margin-top:15px; background:#333; color:white; border:none; padding:8px 20px; border-radius:5px; cursor:pointer;">Close</button>
     </div>
 
     <script>
-        const pointsTable = {
+        const pointsData = {
             'LT5': 20, 'HT5': 40, 'LT4': 60, 'HT4': 80,
             'LT3': 100, 'HT3': 120, 'LT2': 140, 'HT2': 160,
             'LT1': 180, 'HT1': 200
         };
 
-        function showStats(name, region, ...tiers) {
+        function showStats(name, region, tiers) {
             let total = 0;
-            let tierHtml = '';
+            let tierListHtml = '';
             
             tiers.forEach(t => {
-                total += pointsTable[t] || 0;
-                tierHtml += `<span class="tier-badge">${t} (${pointsTable[t]} pts)</span> `;
+                total += pointsData[t] || 0;
+                tierListHtml += `<span class="tier-badge">${t}</span> `;
             });
 
             document.getElementById('m-name').innerText = name;
             document.getElementById('m-region').innerText = "Region: " + region;
             document.getElementById('m-points').innerText = total;
-            document.getElementById('m-tiers').innerHTML = tierHtml;
+            document.getElementById('m-tiers').innerHTML = tierListHtml;
             
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
